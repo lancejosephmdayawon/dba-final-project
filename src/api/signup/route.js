@@ -24,7 +24,7 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert user into database
-    await db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [
+    await db.query("CALL createUser(?, ?, ?)", [
         username,
         email,
         hashedPassword,
