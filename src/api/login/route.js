@@ -10,9 +10,12 @@ export async function POST(req) {
       return Response.json({ message: "Email and password are required" }, { status: 400 });
     }
 
-    // Find user by email
-    const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    // Find user by email using stored procedure
+    const [resultSets] = await db.query("CALL searchUser(?)", [email]);
 
+    // Extract actual rows
+    const rows = resultSets[0];
+    
     if (rows.length === 0) {
       return Response.json({ message: "Invalid email or password" }, { status: 400 });
     }
