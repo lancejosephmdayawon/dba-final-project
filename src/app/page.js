@@ -1,58 +1,36 @@
-import Image from "next/image";
-import { Mail } from "lucide-react";
-import { LockKeyhole } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-blue-500">
-      {/* Outer Card */}
-      <div className="bg-white p-8 rounded-xl shadow-2xl w-96 text-center">
-        {/* Inner Card */}
-        <div className="bg-blue-50 p-6 rounded-lg shadow-md w-72 mx-auto">
-          <Image
-            src="/images/logo.png"
-            alt="LumiDent Logo"
-            width={100}
-            height={100}
-            className="mx-auto"
-            style={{ objectFit: "contain" }}
-          />
-          <Image
-            src="/images/logoName.png"
-            alt="LumiDent Logo"
-            width={150}
-            height={150}
-            className="mx-auto mb-4"
-            style={{ objectFit: "contain" }}
-          />
-          <p className="font-sans font-bold text-xs">
-            Welcome back! Please Login your account.
-          </p>
+  const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-          {/* Input Field Email */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4">
-            {/* Icon */}
-            <Mail className="text-gray-400 w-5 h-5 mr-2" />
-            {/* Input Field */}
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 outline-none"
-            />
-          </div>
-          {/* Input Field Password */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4">
-            {/* Icon */}
-            <LockKeyhole className="text-gray-400 w-5 h-5 mr-2" />
-            {/* Input Field */}
-            <input
-              type="password"
-              placeholder="Enter your email"
-              className="flex-1 outline-none"
-            />
-          </div>
-        </div>
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      const timer = setTimeout(() => {
+        router.replace("/login");
+      }, 3000); // 3 seconds
+
+      return () => clearTimeout(timer);
+    } else {
+      setCheckingAuth(false);
+    }
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
+        <p className="text-sm text-gray-500">
+          Not logged in. Redirecting to login page...
+        </p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null;
 }
