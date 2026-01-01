@@ -1,25 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-// Components
-import SmallSwitch from "@/components/SmallSwitch";
+import Image from "next/image";
+import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
-  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
-    setLoading(true);
+    setError("");
 
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -27,25 +21,20 @@ export default function LoginForm() {
     const res = await signIn("credentials", {
       email,
       password,
-      redirect: false, // we handle redirect manually
-      rememberMe,
+      callbackUrl: "/dashboard",
     });
 
-    setLoading(false);
-
-    if (res?.error) {
-      setErrorMsg("Invalid email or password");
+    if (res.error) {
+      setError(res.error);
     } else {
-      // Redirect after successful login
-      router.push("/dashboard/${session.user.username}");
+      // Redirect to user dashboard
+      router.push(`/dashboard/${res.user.username}`);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-blue-500">
-      {/* Outer Card */}
       <div className="text-center bg-white/30 backdrop-blur-md rounded-xl p-8 w-96 shadow-md">
-        {/* Inner Card */}
         <div className="bg-blue-50 p-6 rounded-lg shadow-md mx-auto">
           <Image
             src="/images/logo.png"
@@ -53,7 +42,6 @@ export default function LoginForm() {
             width={100}
             height={100}
             className="mx-auto"
-            style={{ objectFit: "contain" }}
           />
           <Image
             src="/images/logoName.png"
@@ -61,14 +49,15 @@ export default function LoginForm() {
             width={150}
             height={150}
             className="mx-auto mb-4"
-            style={{ objectFit: "contain" }}
           />
           <p className="font-sans font-bold text-xs">
-            Welcome back! Please Login your account.
+            Welcome back! Please login to your account.
           </p>
 
-          <form method="POST" onSubmit={handleSubmit}>
-            {/* Email Input */}
+          {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+
+          <form onSubmit={handleLogin}>
+            {/* Email */}
             <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4">
               <Mail className="text-gray-400 w-5 h-5 mr-2" />
               <input
@@ -80,7 +69,7 @@ export default function LoginForm() {
               />
             </div>
 
-            {/* Password Input */}
+            {/* Password */}
             <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4 relative">
               <LockKeyhole className="text-gray-400 w-5 h-5 mr-2" />
               <input
@@ -102,32 +91,19 @@ export default function LoginForm() {
               </span>
             </div>
 
-            {/* Remember Me */}
-            <div className="grid grid-cols-2 grid-rows-1 mt-4">
-              <SmallSwitch
-                label="Remember Me"
-                value={rememberMe}
-                onChange={setRememberMe}
-              />
-              <div className="justify-self-end flex items-center">
-                <a href="#" className="text-blue-600 text-xxs hover:underline">
-                  Forgot Password?
-                </a>
-              </div>
+            {/* Forgot Password */}
+            <div className="justify-self-end mt-2 flex items-center">
+              <a href="#" className="text-blue-600 text-xxs hover:underline">
+                Forgot Password?
+              </a>
             </div>
 
-            {/* Display error if login fails */}
-            {errorMsg && (
-              <p className="text-red-600 text-xs mt-6">{errorMsg}</p>
-            )}
-
-            {/* Login Button */}
+            {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
-              className="bg-blue-600 text-white px-4 py-2 rounded mt-6 w-full font-extrabold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="bg-blue-600 text-white px-4 py-2 rounded mt-6 w-full font-extrabold text-sm hover:bg-blue-700 transition-colors"
             >
-              {loading ? "Logging in..." : "Log In"}
+              Log In
             </button>
           </form>
 

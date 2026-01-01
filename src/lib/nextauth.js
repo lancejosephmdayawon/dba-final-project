@@ -1,84 +1,71 @@
+// src/lib/nextauth.js
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "./db";
 import bcrypt from "bcryptjs";
+import { db } from "@lib/db"; // MySQL connection
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      credentials: { email: {}, password: {} },
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Missing credentials");
+        }
+
+        // Call stored procedure to find user
         const [resultSets] = await db.query("CALL searchUser(?)", [credentials.email]);
-        const user = resultSets[0][0];
-        if (!user) return null;
+        const rows = resultSets[0];
+        if (!rows.length) throw new Error("Invalid email or password");
 
+        const user = rows[0];
+
+        // Compare password
         const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
+        if (!isValid) throw new Error("Invalid email or password");
 
-        // Return user info + rememberMe
         return {
           id: user.id,
           username: user.username,
           email: user.email,
-          rememberMe: credentials.rememberMe, // pass it along
         };
       },
     }),
   ],
 
   session: {
-    strategy: "jwt",
+    strategy: "jwt",           // JWT sessions
+    maxAge: 30 * 24 * 60 * 60, // 30 days persistent
+  },
+
+  pages: {
+    signIn: "/login", // custom login page
   },
 
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.username = user.username;
-        token.email = user.email;
-        token.rememberMe = user.rememberMe;
-      }
-      return token;
-    },
     async session({ session, token }) {
+      // Add user info to session
       session.user.id = token.id;
       session.user.username = token.username;
       session.user.email = token.email;
       return session;
     },
-  },
-
-  // 🔑 Conditional cookie configuration
-  cookies: {
-    sessionToken: {
-      name: "next-auth.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "development",
-        // If rememberMe is true → persistent 30 days, else session cookie
-        maxAge: undefined, // will be overridden dynamically
-      },
-    },
-  },
-
-  events: {
-    async signIn({ user, account, profile, isNewUser }) {
-      // Dynamically set cookie maxAge after signIn
-      if (!user.rememberMe) {
-        // Session-only: remove maxAge
-        authOptions.cookies.sessionToken.options.maxAge = undefined;
-      } else {
-        // Persistent: 30 days
-        authOptions.cookies.sessionToken.options.maxAge = 30 * 24 * 60 * 60;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+        token.email = user.email;
       }
+      return token;
     },
-  },
-
-  pages: {
-    signIn: "/login",
   },
 
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
