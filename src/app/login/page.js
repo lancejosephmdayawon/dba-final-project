@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // Components
 import SmallSwitch from "@/components/SmallSwitch";
@@ -10,6 +12,34 @@ import SmallSwitch from "@/components/SmallSwitch";
 export default function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setLoading(true);
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // we handle redirect manually
+      rememberMe,
+    });
+
+    setLoading(false);
+
+    if (res?.error) {
+      setErrorMsg("Invalid email or password");
+    } else {
+      // Redirect after successful login
+      router.push("/dashboard/${session.user.username}");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-blue-500">
@@ -36,68 +66,78 @@ export default function LoginForm() {
           <p className="font-sans font-bold text-xs">
             Welcome back! Please Login your account.
           </p>
-        <form method="POST">
-          {/* Input Field Email */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4">
-            {/* Icon */}
-            <Mail className="text-gray-400 w-5 h-5 mr-2" />
-            {/* Input Field */}
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              className="text-xs flex-1 outline-none"
-            />
-          </div>
-          {/* Input Field Password */}
-          <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4 relative">
-            {/* Lock Icon */}
-            <LockKeyhole className="text-gray-400 w-5 h-5 mr-2" />
+
+          <form method="POST" onSubmit={handleSubmit}>
+            {/* Email Input */}
+            <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4">
+              <Mail className="text-gray-400 w-5 h-5 mr-2" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                className="text-xs flex-1 outline-none"
+                required
+              />
+            </div>
 
             {/* Password Input */}
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Enter your password"
-              className="text-xs flex-1 outline-none"
-            />
-
-            {/* Show/Hide Icon */}
-            <span
-              className="absolute right-2 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <Eye className="w-4 h-4 text-gray-400" />
-              ) : (
-                <EyeOff className="w-4 h-4 text-gray-400" />
-              )}
-            </span>
-          </div>
-          {/* Remember Me Switch and Forgot Password */}
-          <div className="grid grid-cols-2 grid-rows-1 mt-4">
-            <SmallSwitch
-              label="Remember Me"
-              value={rememberMe}
-              onChange={setRememberMe}
-            />
-            <div className="justify-self-end flex items-center">
-              <a
-                href="#"
-                className="text-blue-600 text-xxs hover:underline"
+            <div className="flex items-center border border-gray-300 rounded-lg p-2 w-full mt-4 relative">
+              <LockKeyhole className="text-gray-400 w-5 h-5 mr-2" />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                className="text-xs flex-1 outline-none"
+                required
+              />
+              <span
+                className="absolute right-2 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
               >
-                Forgot Password?
-              </a>
+                {showPassword ? (
+                  <Eye className="w-4 h-4 text-gray-400" />
+                ) : (
+                  <EyeOff className="w-4 h-4 text-gray-400" />
+                )}
+              </span>
             </div>
-          </div>
-          {/* Login Button */}
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded mt-6 w-full font-extrabold text-sm hover:bg-blue-700 transition-colors">
-            Log In
-          </button>
-        </form>
-        {/* Paragraph below Login */}
-        <p className="text-xxs font-sans mt-2">Don't have an account? <a href="/signup" className="text-blue-600 hover:underline">Sign Up</a></p>
 
+            {/* Remember Me */}
+            <div className="grid grid-cols-2 grid-rows-1 mt-4">
+              <SmallSwitch
+                label="Remember Me"
+                value={rememberMe}
+                onChange={setRememberMe}
+              />
+              <div className="justify-self-end flex items-center">
+                <a href="#" className="text-blue-600 text-xxs hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
+            </div>
+
+            {/* Display error if login fails */}
+            {errorMsg && (
+              <p className="text-red-600 text-xs mt-6">{errorMsg}</p>
+            )}
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 text-white px-4 py-2 rounded mt-6 w-full font-extrabold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50"
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </button>
+          </form>
+
+          {/* Sign up link */}
+          <p className="text-xxs font-sans mt-2">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-blue-600 hover:underline">
+              Sign Up
+            </a>
+          </p>
         </div>
       </div>
     </div>

@@ -1,20 +1,20 @@
-// src/app/page.js
+// src/app/dashboard/page.js
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/nextauth";
 
-export default async function HomePage() {
+export default async function DashboardRoot() {
   // Get the session server-side
   const session = await getServerSession(authOptions);
 
   if (session) {
-    // If logged in, redirect to their personal dashboard
+    // If the user is logged in, redirect to their personal dashboard
     redirect(`/dashboard/${session.user.username}`);
   } else {
-    // If no session, redirect to login
+    // Not logged in → redirect to login page
     redirect("/login");
   }
 
-  // This line is never reached; redirect handles it
+  // This line is never reached, redirect handles it
   return null;
 }

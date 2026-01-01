@@ -4,8 +4,9 @@
       "@/*": ["./src/*"],
       "@styles/*": ["./src/styles/*"],
       "@lib/*": ["./src/lib/*"],
-      "@api/*": ["./src/api/*"],
-      "@components/*": ["./src/components/*"]
+      "@api/*": ["./src/app/api/*"],
+      "@components/*": ["./src/components/*"],
+      "@providers/*": ["./src/providers/*"]
     }
   }
 }
