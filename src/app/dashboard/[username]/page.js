@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@lib/nextauth";
 import { redirect } from "next/navigation";
 import LogoutButton from "@components/LogoutButton";
+import Sidebar from "@components/Sidebar";
+
 
 export default async function DashboardPage({ params }) {
   // Get session server-side
@@ -22,17 +24,9 @@ export default async function DashboardPage({ params }) {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50">
-        <h1 className="text-2xl font-bold mb-2">Dashboard Test</h1>
-        <p className="text-lg">
-          Username: <span className="font-semibold">{session.user.username}</span>
-        </p>
-        <p className="text-lg">
-          Email: <span className="font-semibold">{session.user.email}</span>
-        </p>
-        <LogoutButton />
+      <div className="flex-1 bg-gray-100 p-6">
+        <h1 className="text-3xl font-bold mb-4">Main Content</h1>
+        <p>This is where your main page content goes.</p>
       </div>
-    </div>
   );
 }

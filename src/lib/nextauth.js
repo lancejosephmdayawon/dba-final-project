@@ -20,7 +20,7 @@ import { db } from "@lib/db"; // MySQL connection
 // NextAuth configuration (the object passed to NextAuth function)
 export const authOptions = {
   providers: [
-    CredentialsProvider({
+    CredentialsProvider.default({
       name: "Credentials",
       credentials: {
         // Login form fields
@@ -109,5 +109,5 @@ export const authOptions = {
 };
 
 // Export NextAuth handler
-const handler = NextAuth(authOptions);
+const handler = NextAuth.default(authOptions);
 export { handler as GET, handler as POST };
