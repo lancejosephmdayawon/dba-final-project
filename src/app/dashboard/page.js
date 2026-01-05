@@ -16,5 +16,4 @@ export default async function DashboardRoot() {
   }
 
   // This line is never reached, redirect handles it
-  return null;
 }
