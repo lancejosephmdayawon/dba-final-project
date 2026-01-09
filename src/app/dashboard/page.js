@@ -9,7 +9,7 @@ export default async function DashboardRoot() {
 
   if (session) {
     // If the user is logged in, redirect to their personal dashboard
-    redirect(`/dashboard/${session.user.username}`);
+    redirect(`/dashboard/${session.user.username}/appointments`);
   } else {
     // Not logged in → redirect to login page
     redirect("/login");
