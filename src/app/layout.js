@@ -1,5 +1,6 @@
 import "@styles/globals.css"; 
 import ClientProvider from "@providers/ClientProvider";
+import MobileBlocker from "../components/MobileBlocker";
 
 export const metadata = {
   title: "LumiDent: Bright smiles start here.",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ClientProvider>{children}</ClientProvider>
+        <MobileBlocker />
       </body>
     </html>
   );

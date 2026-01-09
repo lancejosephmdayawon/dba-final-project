@@ -1,8 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@lib/nextauth";
 import { redirect } from "next/navigation";
-import LogoutButton from "@components/LogoutButton";
-import Sidebar from "@components/Sidebar";
 
 
 export default async function DashboardPage({ params }) {

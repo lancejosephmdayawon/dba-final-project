@@ -21,14 +21,14 @@ export default function LoginForm() {
     const res = await signIn("credentials", {
       email,
       password,
-      callbackUrl: "/dashboard",
+      redirect: false,
     });
 
     if (res.error) {
       setError(res.error);
     } else {
       // Redirect to user dashboard
-      router.push(`/dashboard/${res.user.username}`);
+      router.push(`/dashboard`);
     }
   };
 

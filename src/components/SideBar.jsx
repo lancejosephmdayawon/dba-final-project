@@ -9,12 +9,14 @@ export default function Sidebar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
 
-  // Wait until session is loaded
+  // Wait for session to load
   if (status === "loading") return null;
   if (!session) return null; // optionally redirect to login
 
-  // Use username from session; fallback to name if username not set
+  // Get user info from session
   const username = session.user.username || session.user.name;
+  const patientId = session.user.id || "N/A";
+  const userInitial = username.charAt(0).toUpperCase();
 
   const navItems = [
     { label: "My Appointments", href: "appointments", icon: Calendar },
@@ -28,14 +30,28 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-gradient-to-b from-blue-100 to-blue-300 h-screen p-4 flex flex-col">
       
-      {/* Logo and Title */}
-      <div className="flex justify-center h-32">
+      {/* Logo */}
+      <div className="flex justify-center h-32 mb-4">
         <div className="flex items-center">
           <img src="/images/logo.png" alt="Logo" className="w-20 h-20 mr-2" />
           <div className="flex flex-col">
             <img src="/images/logoName.png" alt="Title" className="w-30 h-auto" />
             <span className="text-sm text-gray-700">Patient Portal</span>
           </div>
+        </div>
+      </div>
+
+      {/* User Card */}
+      <div className="flex items-center gap-3 bg-white p-3 rounded-md mb-6 shadow">
+        {/* Circle Avatar */}
+        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
+          {userInitial}
+        </div>
+
+        {/* Name and Patient ID */}
+        <div className="flex flex-col">
+          <span className="font-semibold text-gray-800">{username}</span>
+          <span className="text-xxs text-gray-500">Patient ID: #{patientId}</span>
         </div>
       </div>
 
