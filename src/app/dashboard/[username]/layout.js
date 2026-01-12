@@ -1,12 +1,12 @@
-import Sidebar from "@/components/Sidebar";
 import HeaderBar from "@/components/HeaderBar";
+import SidebarWrapper from "@/components/SidebarWrapper";
 
 export default function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar stays in place */}
       <aside className="sticky top-0 h-screen">
-        <Sidebar />
+        <SidebarWrapper />
       </aside>
 
       <div className="flex-1 flex flex-col">

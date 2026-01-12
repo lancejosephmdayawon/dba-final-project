@@ -19,8 +19,11 @@ export default async function DashboardPage({ params }) {
   // Redirect if URL username does not match session
   if (username !== session.user.username) {
     redirect(`/dashboard/${session.user.username}/appointments`);
+  } else {
+    redirect(`/dashboard/${username}/appointments`);
   }
 
+  
   // return (
   //     <div className="flex-1 bg-gray-100 p-6">
   //       <h1 className="text-3xl font-bold mb-4">Main Content</h1>
