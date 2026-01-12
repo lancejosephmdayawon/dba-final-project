@@ -9,52 +9,63 @@ export async function GET(req) {
 
   try {
     // 1. Get service duration
-    const [[service]] = await db.query("SELECT duration_minutes FROM services WHERE id = ?", [serviceId]);
-    if (!service) return new Response(JSON.stringify([]));
+    const [[service]] = await db.query(
+      "SELECT duration_minutes FROM services WHERE id = ?",
+      [serviceId]
+    );
+    if (!service || service.duration_minutes <= 0) return new Response(JSON.stringify([]));
     const duration = service.duration_minutes;
 
-    // 2. Get day of week for date
-    const dayOfWeek = new Date(date).toLocaleDateString("en-US", { weekday: "long" });
+    // 2. Get day of week safely
+    const dayOfWeek = new Date(date + "T00:00:00").toLocaleDateString("en-US", { weekday: "long" });
 
     // 3. Get dentist schedule for that day
     const [[schedule]] = await db.query(
       "SELECT start_time, end_time FROM dentist_schedules WHERE day_of_week = ? AND is_active = 1",
       [dayOfWeek]
     );
-
     if (!schedule) return new Response(JSON.stringify([])); // dentist off that day
 
-    const startTimeParts = schedule.start_time.split(":").map(Number);
-    const endTimeParts = schedule.end_time.split(":").map(Number);
+    const toMinutes = (t) => {
+      const [h, m] = t.split(":").map(Number);
+      return h * 60 + m;
+    };
 
-    // 4. Get existing appointments for that date
+    const startMinutes = toMinutes(schedule.start_time);
+    const endMinutes = toMinutes(schedule.end_time);
+
+    // 4. Get existing appointments
     const [appointments] = await db.query(
       "SELECT start_time, end_time FROM appointments WHERE appointment_date = ? AND status IN ('pending','approved')",
       [date]
     );
 
-    // 5. Generate possible slots
     const slots = [];
-    let currentHour = startTimeParts[0];
-    let currentMin = startTimeParts[1];
+    let current = startMinutes;
 
-    while (currentHour < endTimeParts[0] || (currentHour === endTimeParts[0] && currentMin < endTimeParts[1])) {
-      const slotStart = `${currentHour.toString().padStart(2,'0')}:${currentMin.toString().padStart(2,'0')}:00`;
+    const now = new Date();
+    const isToday = new Date(date).toDateString() === now.toDateString();
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-      let endHour = currentHour + Math.floor((currentMin + duration) / 60);
-      let endMin = (currentMin + duration) % 60;
-      const slotEnd = `${endHour.toString().padStart(2,'0')}:${endMin.toString().padStart(2,'0')}:00`;
+    while (current + duration <= endMinutes) {
+      const slotStart = current;
+      const slotEnd = current + duration;
 
-      // Check conflict
-      const conflict = appointments.some(a =>
-        !(slotEnd <= a.start_time || slotStart >= a.end_time)
-      );
+      // Check for conflicts
+      const conflict = appointments.some((a) => {
+        const apptStart = toMinutes(a.start_time);
+        const apptEnd = toMinutes(a.end_time);
+        return !(slotEnd <= apptStart || slotStart >= apptEnd);
+      });
 
-      if (!conflict) slots.push(slotStart);
+      // Skip if conflict or past time
+      if (!conflict && (!isToday || slotStart > nowMinutes)) {
+        const h = Math.floor(slotStart / 60).toString().padStart(2, "0");
+        const m = (slotStart % 60).toString().padStart(2, "0");
+        slots.push(`${h}:${m}`); // format HH:MM for <input type="time">
+      }
 
-      // Increment by duration
-      currentHour = endHour;
-      currentMin = endMin;
+      current += duration;
     }
 
     return new Response(JSON.stringify(slots));
