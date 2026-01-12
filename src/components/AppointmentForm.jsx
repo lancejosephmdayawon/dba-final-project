@@ -77,7 +77,7 @@ export default function AppointmentForm({ patientId }) {
     <div className="m-6 flex justify-center px-6">
       <div className="w-full rounded-2xl bg-blue-100 p-6 shadow-lg">
         <div className="mb-6 border-b pb-4">
-          <h2 className="text-2xl font-extrabold text-gray-800">
+          <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900">
             Book New Appointment
           </h2>
           <p className="text-gray-600 text-base">
@@ -138,30 +138,27 @@ export default function AppointmentForm({ patientId }) {
             <label className="flex items-center gap-1 font-semibold mb-1">
               <Clock size={18} /> Preferred Time
             </label>
-            <input
-              type="time"
+
+            <select
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              list="available-times"
               className={`w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 !date ? "bg-gray-100 cursor-not-allowed" : "bg-white"
               }`}
-              disabled={!date}
+              disabled={!date || availableTimes.length === 0} // disable until slots available
               required={!!date}
-            />
-            <datalist id="available-times">
+            >
+              <option value="">Select Time</option>
               {availableTimes.map((t) => (
-                <option key={t} value={t} />
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
-            </datalist>
+            </select>
+
             {date && availableTimes.length === 0 && (
               <div className="mt-2 text-xs text-gray-500">
                 No available slots for this date
-              </div>
-            )}
-            {availableTimes.length > 0 && (
-              <div className="mt-2 text-xs text-gray-600">
-                Available: {availableTimes.join(", ")}
               </div>
             )}
           </div>
