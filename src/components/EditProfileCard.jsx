@@ -49,7 +49,7 @@ export default function EditProfileCard() {
 
   const showTempMessage = (msg) => {
     setMessage(msg);
-    setTimeout(() => setMessage(""), 10000); // clear after 10s
+    setTimeout(() => setMessage(""), 10000);
   };
 
   const saveProfile = async () => {
@@ -71,20 +71,20 @@ export default function EditProfileCard() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="bg-blue-100/70 border border-blue-200 rounded-2xl shadow-sm p-6 max-w-3xl mx-auto space-y-6">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-          <Pencil size={16} /> Edit Profile
+    <div className="bg-blue-100 border border-blue-100 rounded-3xl shadow-xl p-8 max-w-4xl mx-auto hover:shadow-2xl transition-shadow duration-300">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="font-semibold text-gray-800 text-lg flex items-center gap-2">
+          <Pencil size={20} /> Profile Information
         </h3>
         <button
           onClick={() => setProfileEditing(!profileEditing)}
-          className="text-sm text-blue-600 hover:text-blue-700 px-3 py-1 border border-blue-300 rounded-lg"
+          className="text-sm text-blue-600 hover:text-blue-800 font-medium px-4 py-2 border border-blue-200 rounded-lg transition-colors duration-200"
         >
           {profileEditing ? "Cancel" : "Edit"}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InfoField label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} disabled={!profileEditing} icon={User} />
         <InfoField label="Middle Name" name="middle_name" value={formData.middle_name} onChange={handleChange} disabled={!profileEditing} icon={User} />
         <InfoField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} disabled={!profileEditing} icon={User} />
@@ -101,7 +101,7 @@ export default function EditProfileCard() {
             value={formData.gender}
             onChange={handleChange}
             disabled={!profileEditing}
-            className="mt-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
+            className="mt-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 transition"
           >
             <option value="">Select</option>
             <option value="male">Male</option>
@@ -112,17 +112,17 @@ export default function EditProfileCard() {
       </div>
 
       {profileEditing && (
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-6">
           <button
             onClick={saveProfile}
-            className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 font-medium shadow-md"
           >
-            <Save size={16} /> Save Profile
+            <Save size={18} /> Save Profile
           </button>
         </div>
       )}
 
-      {message && <p className="mt-3 text-sm text-green-600">{message}</p>}
+      {message && <p className="mt-4 text-sm text-green-600 font-medium">{message}</p>}
     </div>
   );
 }
@@ -131,7 +131,7 @@ function InfoField({ label, name, value, onChange, disabled, type = "text", icon
   return (
     <div className="flex flex-col">
       <label className="text-sm font-medium text-gray-600 flex items-center gap-2">
-        <Icon size={16} /> {label}
+        <Icon size={18} /> {label}
       </label>
       <input
         type={type}
@@ -139,7 +139,7 @@ function InfoField({ label, name, value, onChange, disabled, type = "text", icon
         value={value || ""}
         onChange={onChange}
         disabled={disabled}
-        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
+        className="mt-2 rounded-xl border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50 transition"
       />
     </div>
   );
