@@ -42,7 +42,7 @@ export default function SummaryCards() {
   const formatPeso = (amount) => `₱${Number(amount).toFixed(2)}`;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="m-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {/* Total Balance */}
       <div className="flex items-center p-4 bg-blue-100 rounded-xl shadow-sm">
         <div className="p-3 bg-white rounded-full mr-4">

@@ -11,6 +11,10 @@ export default function Appointment() {
 
   return (
     <div className="space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold mx-6 mt-6">Payment History & Transparency</h2>
+        <p className="mx-6 text-gray-700">View all your payment transactions and balances.</p>
+      </div>
       <section>
         <SummaryCards />
       </section>
