@@ -3,13 +3,22 @@ import HeaderBar from "@/components/HeaderBar";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex h-screen">
-      <Sidebar />
+    <div className="flex min-h-screen">
+      {/* Sidebar stays in place */}
+      <aside className="sticky top-0 h-screen">
+        <Sidebar />
+      </aside>
 
       <div className="flex-1 flex flex-col">
-        <HeaderBar />
-        
-        <main className="flex-1 p-6 bg-gray-50">{children}</main>
+        {/* Header sticks, still takes space */}
+        <header className="sticky top-0 z-20 bg-white">
+          <HeaderBar />
+        </header>
+
+        {/* Main content scrolls */}
+        <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-blue-300 to-blue-500">
+          {children}
+        </main>
       </div>
     </div>
   );

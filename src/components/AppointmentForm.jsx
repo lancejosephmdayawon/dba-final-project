@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock } from "lucide-react";
+import { CalendarFold, Clock, IdCardLanyard } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function AppointmentForm({ patientId }) {
@@ -46,11 +46,14 @@ export default function AppointmentForm({ patientId }) {
   };
 
   return (
-    <div className="m-6 flex justify-center">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Book Appointment
-        </h2>
+    <div className="m-6 flex justify-center px-6">
+      <div className="w-full rounded-2xl bg-blue-100 p-6 shadow-lg">
+        <div className="mb-6 border-b pb-4">
+          <h2 className="text-2xl font-extrabold text-gray-800">
+            Book New Appointment
+          </h2>
+          <p className="text-gray-600 text-base">Request an appointment with our dentist</p>
+        </div>
 
         {message && (
           <div className="mb-4 rounded-lg bg-red-100 p-2 text-red-700">
@@ -60,40 +63,52 @@ export default function AppointmentForm({ patientId }) {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Service Dropdown */}
-          <select
-            value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
-            className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          >
-            <option value="">Select Service</option>
-            {services.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} ({s.duration_minutes} mins)
-              </option>
-            ))}
-          </select>
-          {/* Date Picker */}
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => {
-              const selectedDate = e.target.value;
-              setDate(selectedDate);
+          <div>
+            <label className="flex items-center gap-1 font-semibold mb-1">
+              <IdCardLanyard size={18} /> Appointment Type
+            </label>
+            <select
+              value={serviceId}
+              onChange={(e) => setServiceId(e.target.value)}
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              required
+            >
+              <option value="">Select type</option>
+              {services.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name} ({s.duration_minutes} mins)
+                </option>
+              ))}
+            </select>
+          </div>
 
-              // Clear time and available times if date is empty
-              if (!selectedDate) {
-                setTime("");
-                setAvailableTimes([]);
-              }
-            }}
-            className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+          {/* Date Picker */}
+          <div>
+            <label className="flex items-center gap-1 font-semibold mb-1">
+              <CalendarFold size={18} /> Preferred Date
+            </label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => {
+                const selectedDate = e.target.value;
+                setDate(selectedDate);
+
+                // Clear time and available times if date is empty
+                if (!selectedDate) {
+                  setTime("");
+                  setAvailableTimes([]);
+                }
+              }}
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              required
+            />
+          </div>
+
           {/* Time Picker */}
           <div className="mt-3">
-            <label className="flex items-center gap-1 text-blue-900 font-medium mb-1">
-              <Clock size={18} /> Time
+            <label className="flex items-center gap-1 font-semibold mb-1">
+              <Clock size={18} /> Preferred Time
             </label>
 
             <input
@@ -101,7 +116,7 @@ export default function AppointmentForm({ patientId }) {
               value={time}
               onChange={(e) => setTime(e.target.value)}
               list="available-times"
-              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               required={!!date} // required only if date is selected
             />
 
@@ -118,12 +133,18 @@ export default function AppointmentForm({ patientId }) {
             )}
           </div>
           {/* Notes */}
-          <textarea
-            placeholder="Additional notes (optional)"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div>
+            <label className="flex items-center gap-1 font-semibold mb-1">
+              <CalendarFold size={18} /> Additional Notes (Optional)
+            </label>
+            <textarea
+              placeholder="Any special requirements or concerns..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="w-full h-30 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 py-2 text-white hover:bg-blue-700"
