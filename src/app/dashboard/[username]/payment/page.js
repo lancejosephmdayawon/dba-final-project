@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import TransactionsCard from "@/components/TransactionCard"
+import SummaryCards from "@/components/SummaryCards";
+import TransactionsCard from "@/components/TransactionCard";
 import { useSession } from "next-auth/react";
 
 export default function Appointment() {
@@ -10,6 +11,9 @@ export default function Appointment() {
 
   return (
     <div className="space-y-8">
+      <section>
+        <SummaryCards />
+      </section>
       <section>
         <TransactionsCard />
       </section>
