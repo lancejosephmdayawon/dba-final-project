@@ -35,7 +35,7 @@ export default function SidebarContent({ session }) {
   return (
     <div className="w-64 bg-gradient-to-b from-blue-100 to-blue-300 h-screen p-4 flex flex-col">
 
-      {/* LOGO SECTION (RESTORED) */}
+      {/* LOGO SECTION */}
       <div className="flex justify-center h-32 mb-4">
         <div className="flex items-center">
           <img src="/images/logo.png" alt="Logo" className="w-20 h-20 mr-2" />
