@@ -1,5 +1,6 @@
 "use client";
 
+import PaymentOptionsCard from "@/components/PaymentOptionsCard";
 import SummaryCards from "@/components/SummaryCards";
 import TransactionsCard from "@/components/TransactionCard";
 import { useSession } from "next-auth/react";
@@ -20,6 +21,9 @@ export default function Appointment() {
       </section>
       <section>
         <TransactionsCard />
+      </section>
+      <section>
+        <PaymentOptionsCard />
       </section>
     </div>
   );
