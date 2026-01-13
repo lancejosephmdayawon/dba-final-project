@@ -61,9 +61,9 @@ export default function ChangePasswordCard() {
   };
 
   return (
-    <div className="bg-blue-100 border border-blue-100 rounded-3xl shadow-xl p-8 max-w-4xl mx-auto hover:shadow-2xl transition-shadow duration-300 mt-8">
+    <div className="bg-blue-100 border border-blue-100 rounded-3xl shadow-xl p-8 m-6 hover:shadow-2xl transition-shadow duration-300 mt-8">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-semibold text-gray-800 text-lg flex items-center gap-2">
+        <h3 className="font-semibold text-gray-800 text-xl flex items-center gap-2">
           <Lock size={20} /> Change Password
         </h3>
         <button
@@ -87,7 +87,7 @@ export default function ChangePasswordCard() {
           {/* Clear Button */}
           <button
             onClick={clearFields}
-            className="flex items-center gap-2 bg-gray-200 text-gray-700 px-5 py-3 rounded-xl hover:bg-gray-300 transition-colors duration-200 font-medium shadow-sm"
+            className="flex items-center gap-2 text-red-500 px-5 py-3 rounded-xl hover:text-red-900 transition-colors duration-200 font-medium"
           >
             <Trash2 size={18} /> Clear
           </button>
@@ -117,7 +117,7 @@ function PasswordField({ label, name, value, onChange, show, toggleShow }) {
         name={name}
         value={value || ""}
         onChange={onChange}
-        className="mt-2 rounded-xl border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        className="mt-2 rounded-xl bg-white border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
       />
       <button
         type="button"

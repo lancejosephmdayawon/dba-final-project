@@ -1,6 +1,6 @@
 import "@styles/globals.css"; 
 import ClientProvider from "@providers/ClientProvider";
-import MobileBlocker from "../components/MobileBlocker";
+import MobileBlocker from "../components/patient/MobileBlocker";
 
 export const metadata = {
   title: "LumiDent: Bright smiles start here.",

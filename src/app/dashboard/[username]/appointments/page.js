@@ -1,7 +1,7 @@
 'use client';
 
-import AppointmentForm from "@/components/AppointmentForm";
-import UpcomingAppointments from "@/components/UpcomingAppointments";
+import AppointmentForm from "@/components/patient/AppointmentForm";
+import UpcomingAppointments from "@/components/patient/UpcomingAppointments";
 import { useSession } from "next-auth/react";
 
 export default function Appointment() {

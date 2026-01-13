@@ -4,16 +4,18 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/nextauth";
 
 export default async function DashboardRoot() {
-  // Get the session server-side
   const session = await getServerSession(authOptions);
 
-  if (session) {
-    // If the user is logged in, redirect to their personal dashboard
-    redirect(`/dashboard/${session.user.username}/appointments`);
-  } else {
-    // Not logged in → redirect to login page
+  // Not logged in → login page
+  if (!session) {
     redirect("/login");
   }
 
-  // This line is never reached, redirect handles it
+  // Admin → admin dashboard
+  if (session.user.role === "admin") {
+    redirect("/dashboard/admin");
+  }
+
+  // All other users → personal dashboard
+  redirect(`/dashboard/${session.user.username}/appointments`);
 }

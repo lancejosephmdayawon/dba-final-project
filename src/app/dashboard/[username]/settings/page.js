@@ -1,7 +1,7 @@
 'use client';
 
-import ChangePasswordCard from "@/components/ChangePasswordCard";
-import EditProfileCard from "@/components/EditProfileCard";
+import ChangePasswordCard from "@/components/patient/ChangePasswordCard";
+import EditProfileCard from "@/components/patient/EditProfileCard";
 import { useSession } from "next-auth/react";
 
 export default function Appointment() {

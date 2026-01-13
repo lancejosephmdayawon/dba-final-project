@@ -1,5 +1,5 @@
-import HeaderBar from "@/components/HeaderBar";
-import SidebarWrapper from "@/components/SidebarWrapper";
+import HeaderBar from "@/components/patient/HeaderBar";
+import SidebarWrapper from "@/components/patient/SidebarWrapper";
 
 export default function DashboardLayout({ children }) {
   return (

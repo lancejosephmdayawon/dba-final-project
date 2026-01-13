@@ -98,7 +98,7 @@ export default function AppointmentForm({ patientId }) {
                 setTime("");
                 setAvailableTimes([]);
               }}
-              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               required
             >
               <option value="">Select type</option>
@@ -128,7 +128,7 @@ export default function AppointmentForm({ patientId }) {
                 }
               }}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               required
             />
           </div>
@@ -142,8 +142,8 @@ export default function AppointmentForm({ patientId }) {
             <select
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className={`w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                !date ? "bg-gray-100 cursor-not-allowed" : "bg-white"
+              className={`w-full rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                !date ? "cursor-not-allowed" : "bg-white"
               }`}
               disabled={!date || availableTimes.length === 0} // disable until slots available
               required={!!date}
@@ -172,7 +172,7 @@ export default function AppointmentForm({ patientId }) {
               placeholder="Any special requirements or concerns..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full h-30 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="w-full h-30 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             />
           </div>
 

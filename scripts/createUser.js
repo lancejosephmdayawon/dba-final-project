@@ -1,7 +1,7 @@
 // scripts/createUser.js
 
 import dotenv from "dotenv";
-dotenv.config({ path: './.env.local' });
+dotenv.config({ path: "./.env.local" });
 
 import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
@@ -13,33 +13,80 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-// Updated createUser function
-async function createUser(username, lastName, firstName, middleName, email, plainPassword) {
+// Create user function (supports admin & patient)
+async function createUser(
+  username,
+  lastName,
+  firstName,
+  middleName,
+  email,
+  plainPassword,
+  role
+) {
   try {
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
     const sql = `
-      INSERT INTO users (username, last_name, first_name, middle_name, email, password)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO users (
+        username,
+        last_name,
+        first_name,
+        middle_name,
+        email,
+        password,
+        role,
+        email_verified,
+        created_at,
+        updated_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, 1, NOW(), NOW())
     `;
-    const [result] = await db.execute(sql, [username, lastName, firstName, middleName, email, hashedPassword]);
-    console.log(`✅ User created: ID=${result.insertId}, username=${username}`);
+
+    const [result] = await db.execute(sql, [
+      username,
+      lastName,
+      firstName,
+      middleName,
+      email,
+      hashedPassword,
+      role,
+    ]);
+
+    console.log(
+      `✅ User created: ID=${result.insertId}, username=${username}, role=${role}`
+    );
   } catch (err) {
     console.error("❌ Error creating user:", err.message);
   }
 }
 
-// Example users with full names
+// Users (ADMIN + PATIENTS)
 const sampleUsers = [
-  { username: "lance", last_name: "Dayawon", first_name: "Lance Joseph", middle_name: "M.", email: "lancejosephmanalangdayawon3@gmail.com", password: "12345678" },
-  { username: "kyle", last_name: "Dayawon", first_name: "Kyle Adam", middle_name: "M.", email: "kyledayawon@gmail.com", password: "kyle1234" },
-  { username: "rin", last_name: "Bofill", first_name: "Angeline", middle_name: "M.", email: "rinbofill@email.com", password: "rin1234" },
+  {
+    username: "admin",
+    last_name: "Administrator",
+    first_name: "System",
+    middle_name: null,
+    email: "admin@lumident.com",
+    password: "admin123",
+    role: "admin",
+  },
 ];
 
 async function run() {
   for (const user of sampleUsers) {
-    await createUser(user.username, user.last_name, user.first_name, user.middle_name, user.email, user.password);
+    await createUser(
+      user.username,
+      user.last_name,
+      user.first_name,
+      user.middle_name,
+      user.email,
+      user.password,
+      user.role
+    );
   }
-  await db.end(); // close the pool
+
+  await db.end();
   console.log("🎉 All users created!");
   process.exit(0);
 }

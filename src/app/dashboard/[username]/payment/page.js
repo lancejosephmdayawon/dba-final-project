@@ -1,8 +1,8 @@
 "use client";
 
-import PaymentOptionsCard from "@/components/PaymentOptionsCard";
-import SummaryCards from "@/components/SummaryCards";
-import TransactionsCard from "@/components/TransactionCard";
+import PaymentOptionsCard from "@/components/patient/PaymentOptionsCard";
+import SummaryCards from "@/components/patient/SummaryCards";
+import TransactionsCard from "@/components/patient/TransactionCard";
 import { useSession } from "next-auth/react";
 
 export default function Appointment() {

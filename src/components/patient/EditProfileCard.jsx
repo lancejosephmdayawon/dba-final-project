@@ -71,9 +71,9 @@ export default function EditProfileCard() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="bg-blue-100 border border-blue-100 rounded-3xl shadow-xl p-8 max-w-4xl mx-auto hover:shadow-2xl transition-shadow duration-300">
+    <div className="bg-blue-100 border border-blue-100 rounded-3xl shadow-xl p-8 m-6 hover:shadow-2xl transition-shadow duration-300">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-semibold text-gray-800 text-lg flex items-center gap-2">
+        <h3 className="font-semibold text-gray-800 text-xl flex items-center gap-2">
           <Pencil size={20} /> Profile Information
         </h3>
         <button
@@ -101,7 +101,7 @@ export default function EditProfileCard() {
             value={formData.gender}
             onChange={handleChange}
             disabled={!profileEditing}
-            className="mt-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100 transition"
+            className="mt-1 rounded-xl bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-blue-100 disabled:appearance-none transition"
           >
             <option value="">Select</option>
             <option value="male">Male</option>
@@ -139,7 +139,7 @@ function InfoField({ label, name, value, onChange, disabled, type = "text", icon
         value={value || ""}
         onChange={onChange}
         disabled={disabled}
-        className="mt-2 rounded-xl border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50 transition"
+        className="bg-white mt-2 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-blue-100 transition"
       />
     </div>
   );

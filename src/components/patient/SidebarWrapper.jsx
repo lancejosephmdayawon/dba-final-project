@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import SidebarContent from "@components/SidebarContent";
+import SidebarContent from "@/components/patient/SidebarContent";
 
 export default function SidebarWrapper() {
   const { data: session, status } = useSession();
