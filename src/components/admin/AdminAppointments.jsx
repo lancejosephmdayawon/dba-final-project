@@ -116,7 +116,7 @@ export default function AdminAppointments() {
         ))}
       </div>
 
-      <div className="bg-blue-100 rounded-2xl shadow-lg p-6 space-y-6">
+      <div className="bg-gray-100 rounded-2xl shadow-lg p-6 space-y-6">
         <h3 className="text-2xl font-bold flex items-center gap-2 text-gray-900">Appointments</h3>
 
         <div className="flex gap-2 flex-wrap">

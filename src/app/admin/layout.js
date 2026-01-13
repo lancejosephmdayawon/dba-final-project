@@ -16,7 +16,7 @@ export default function AdminDashboardLayout({ children }) {
         </header>
 
         {/* Main content scrolls */}
-        <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-blue-300 to-blue-500">
+        <main className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-gray-300 to-gray-400">
           {children}
         </main>
       </div>

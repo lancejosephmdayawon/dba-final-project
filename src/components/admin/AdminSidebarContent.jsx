@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Calendar, Users, LogOut, User, HandCoins } from "lucide-react";
+import { Calendar, Users, LogOut, HandCoins, Settings } from "lucide-react";
 
 export default function AdminSidebarContent({ session }) {
   const pathname = usePathname();
@@ -16,7 +16,7 @@ export default function AdminSidebarContent({ session }) {
     { label: "Appointments", href: "appointments", icon: Calendar },
     { label: "Patients", href: "patients", icon: Users },
     { label: "Payments", href: "payments", icon: HandCoins },
-    { label: "Profile", href: "profile", icon: User },
+    { label: "Settings", href: "settings", icon: Settings },
   ];
 
   const normalize = (url) => url.replace(/\/$/, "");
