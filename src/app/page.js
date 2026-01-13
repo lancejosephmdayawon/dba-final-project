@@ -7,6 +7,10 @@ export default async function HomePage() {
   // Get the session server-side
   const session = await getServerSession(authOptions);
 
+  if (session.user.role === "admin") {
+    // If admin, redirect to admin dashboard
+    redirect("/admin");
+  } else
   if (session) {
     // If logged in, redirect to their personal dashboard
     redirect(`/dashboard/${session.user.username}`);

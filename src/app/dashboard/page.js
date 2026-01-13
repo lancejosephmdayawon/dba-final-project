@@ -13,7 +13,7 @@ export default async function DashboardRoot() {
 
   // Admin → admin dashboard
   if (session.user.role === "admin") {
-    redirect("/dashboard/admin");
+    redirect("/admin");
   }
 
   // All other users → personal dashboard

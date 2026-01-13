@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 export default function Appointment() {
   const { data: session } = useSession();
 
-  if (!session) return <p>Please log in to view transactions.</p>;
+  if (!session) return <p>Please <a href="/login" className ='underline text-blue-700'>log in</a> to view transactions.</p>;
 
   return (
     <div className="space-y-8">

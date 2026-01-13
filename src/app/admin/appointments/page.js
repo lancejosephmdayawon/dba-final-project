@@ -1,10 +1,9 @@
 'use client';
 
-import AppointmentForm from "@/components/patient/AppointmentForm";
-import UpcomingAppointments from "@/components/patient/UpcomingAppointments";
+import AdminAppointments from "@/components/admin/AdminAppointments";
 import { useSession } from "next-auth/react";
 
-export default function Appointment() {
+export default function AdminAppointment() {
   const { data: session } = useSession();
 
   if (!session) return <p>Please <a href="/login" className ='underline text-blue-700'>log in</a> to view or book appointments.</p>;
@@ -12,11 +11,7 @@ export default function Appointment() {
   return (
     <div className="space-y-8">
       <section>
-        <UpcomingAppointments />
-      </section>
-
-      <section>
-        <AppointmentForm />
+        <AdminAppointments />
       </section>
     </div>
   );
