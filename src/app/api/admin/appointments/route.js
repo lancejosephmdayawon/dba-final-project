@@ -24,7 +24,7 @@ export async function GET() {
       ORDER BY a.appointment_date ASC, a.start_time ASC
     `);
 
-    console.log("Fetched appointments:", rows); // debug
+    // console.log("Fetched appointments:", rows); // debug
     return new Response(JSON.stringify({ appointments: rows }), { status: 200 });
   } catch (err) {
     console.error("DB error:", err);
