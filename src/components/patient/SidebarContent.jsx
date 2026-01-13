@@ -10,7 +10,7 @@ export default function SidebarContent({ session }) {
   const pathname = usePathname();
   const [patientId, setPatientId] = useState(null);
 
-  const username = session.user.first_name || session.user.name;
+  const username = session.user.first_name || session.user.username;
   const userInitial = username.charAt(0).toUpperCase();
 
   // Fetch patients.id

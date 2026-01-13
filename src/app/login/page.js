@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
@@ -18,6 +18,7 @@ export default function LoginForm() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    // Attempt login
     const res = await signIn("credentials", {
       email,
       password,
@@ -26,10 +27,21 @@ export default function LoginForm() {
 
     if (res.error) {
       setError(res.error);
-    } else {
-      // Redirect to user dashboard
-      router.push(`/dashboard`);
+      return;
     }
+
+    // Get the session after successful login
+    const session = await getSession();
+
+    // Check if user's email is verified
+    if (!session?.user?.email_verified) {
+      // Throw error if email not verified
+      setError("Account undergoing verification process.");
+      return;
+    }
+
+    // Email is verified, redirect to user dashboard
+    router.push(`/dashboard`);
   };
 
   return (

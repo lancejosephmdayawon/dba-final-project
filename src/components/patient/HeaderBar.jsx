@@ -17,7 +17,7 @@ export default function HeaderBar() {
   if (status === "loading") return null;
   if (!session) return null;
 
-  const username = session.user.first_name;
+  const username = session.user.first_name || session.user.username;
 
   const dayNames = [
     "Sunday",
