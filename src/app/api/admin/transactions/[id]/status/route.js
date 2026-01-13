@@ -2,7 +2,8 @@ import { db } from "@/lib/db";
 
 export async function PATCH(req, context) {
   try {
-    const id = Number(context.params.id);
+    const params = await context.params; 
+    const id = Number(params.id);  
     const { status } = await req.json();
 
     if (!id || !["pending", "paid"].includes(status)) {
