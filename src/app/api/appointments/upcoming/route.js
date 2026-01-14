@@ -1,8 +1,9 @@
 // /src/app/api/appointments/upcoming/route.js
 import mysql from "mysql2/promise";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/nextauth"; // adjust path if needed
+import { authOptions } from "@/lib/nextauth"; 
 
+// Create a MySQL connection pool
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -17,7 +18,7 @@ export async function GET(req) {
     if (!session) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
-
+  // Session check
     const userId = session.user.id;
     const [[patient]] = await db.query("SELECT id FROM patients WHERE user_id = ?", [userId]);
 
@@ -26,6 +27,7 @@ export async function GET(req) {
       // <-- always return JSON
     }
 
+  // Fetch upcoming appointments for this patient
     const [appointments] = await db.query(
       `
       SELECT a.id, a.status, a.appointment_date, a.start_time, s.name AS service_name
@@ -54,6 +56,7 @@ export async function POST(req) {
   const userId = session.user.id;
   const { appointmentId } = await req.json();
 
+  // Input validation
   const [[patient]] = await db.query("SELECT id FROM patients WHERE user_id = ?", [userId]);
   if (!patient) {
     return new Response(JSON.stringify({ error: "Patient not found" }), { status: 404 });
@@ -69,6 +72,7 @@ export async function POST(req) {
     return new Response(JSON.stringify({ error: "Not allowed" }), { status: 403 });
   }
 
+  // Cancel the appointment
   await db.query("UPDATE appointments SET status = 'cancelled' WHERE id = ?", [appointmentId]);
 
   return new Response(JSON.stringify({ message: "Appointment cancelled" }), { status: 200 });

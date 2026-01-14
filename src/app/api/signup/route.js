@@ -2,10 +2,12 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
+// POST to sign up a new user
 export async function POST(req) {
   try {
     const { username, email, password } = await req.json();
 
+    // Validate input
     if (!username || !email || !password) {
       return NextResponse.json({ message: "All fields are required" }, { status: 400 });
     }
@@ -28,6 +30,7 @@ export async function POST(req) {
     // Insert user using stored procedure
     await db.query("CALL createUser(?, ?, ?)", [username, email, hashedPassword]);
 
+    // Success response
     return NextResponse.json({ message: "User created successfully" }, { status: 201 });
   } catch (err) {
     console.error(err);

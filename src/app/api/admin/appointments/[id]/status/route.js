@@ -1,6 +1,7 @@
 // /app/api/admin/appointments/[id]/status/route.js
 import { db } from "@/lib/db";
 
+// PATCH update appointment status
 export async function PATCH(req, { params }) {
   const { id } = params;
   const { status } = await req.json();
@@ -10,6 +11,7 @@ export async function PATCH(req, { params }) {
   }
 
   try {
+    // Update appointment status
     await db.query(
       `UPDATE appointments SET status = ?, updated_at = NOW() WHERE id = ?`,
       [status, id]

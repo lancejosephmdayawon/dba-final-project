@@ -1,4 +1,4 @@
-// Path: src/app/api/admin/patients/route.js
+// src/app/api/admin/patients/route.js
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextauth";
 import { db } from "@/lib/db";
@@ -11,6 +11,7 @@ export async function GET() {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
+// Fetch patient list with details and latest completed appointment date 
   const [rows] = await db.query(`
     SELECT 
       u.id AS user_id,
@@ -68,7 +69,7 @@ export async function POST(req) {
   const birthdateValue = birthdate ? birthdate : null;
 
   try {
-    // 1️⃣ Check if user already exists
+    // 1️⃣ Check if user exists
     const [existingUsers] = await db.query(
       `SELECT id FROM users WHERE username = ? OR email = ?`,
       [username, email]
@@ -80,7 +81,7 @@ export async function POST(req) {
     if (existingUsers.length > 0) {
       userId = existingUsers[0].id;
 
-      // 2️⃣ Check if patient already exists for this user
+      // 2️⃣ Existing user → check if patient exists
       const [existingPatient] = await db.query(
         `SELECT id FROM patients WHERE user_id = ?`,
         [userId]
@@ -96,6 +97,7 @@ export async function POST(req) {
       tempPassword = password || Math.random().toString(36).slice(-8);
       const hashedPassword = await bcrypt.hash(tempPassword, 10);
 
+      // Insert into users table
       const [userResult] = await db.query(
         `INSERT INTO users (username,email,password,role,email_verified,first_name,last_name)
          VALUES (?, ?, ?, 'patient', 0, ?, ?)`,
@@ -105,7 +107,7 @@ export async function POST(req) {
       userId = userResult.insertId;
     }
 
-    // ✅ Update patient row created by trigger with optional info
+    // Update patient row created by trigger with optional info
     await db.query(
       `UPDATE patients
        SET contact_number = ?, gender = ?, birthdate = ?, updated_at = NOW()

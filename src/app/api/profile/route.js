@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextauth";
 
+// GET to fetch user profile
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -14,16 +15,19 @@ export async function GET() {
 
     const userId = session.user.id;
 
+    // Fetch user and patient details
     const [userRows] = await db.execute(
       "SELECT id, username, first_name, middle_name, last_name, email FROM users WHERE id = ?",
       [userId]
     );
 
+    // If no user found
     const [patientRows] = await db.execute(
       "SELECT id, contact_number, address, birthdate, gender FROM patients WHERE user_id = ?",
       [userId]
     );
 
+    // If no patient found
     return new Response(
       JSON.stringify({ user: userRows[0], patient: patientRows[0] }),
       { status: 200, headers: { "Content-Type": "application/json" } }

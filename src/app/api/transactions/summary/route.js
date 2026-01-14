@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/nextauth";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+// GET to fetch transaction summary
 export async function GET(req) {
   try {
     // Pass the request to getServerSession
@@ -13,6 +14,7 @@ export async function GET(req) {
 
     const userId = session.user.id;
 
+    // Fetch summary data
     const [rows] = await db.query(
       `
       SELECT
@@ -28,6 +30,7 @@ export async function GET(req) {
       [userId]
     );
 
+    // Return the first row as JSON response
     return NextResponse.json(rows[0]);
   } catch (err) {
     console.error("Error fetching summary:", err);

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextauth";
 import bcrypt from "bcryptjs";
 
+// PATCH to update user password
 export async function PATCH(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,6 +17,7 @@ export async function PATCH(req) {
     const userId = session.user.id;
     const { oldPassword, newPassword } = await req.json();
 
+    // Validate input
     if (!oldPassword || !newPassword) {
       return new Response(
         JSON.stringify({ error: "Old and new password are required" }),
@@ -49,6 +51,7 @@ export async function PATCH(req) {
     const hashed = await bcrypt.hash(newPassword, 10);
     await db.execute("UPDATE users SET password=? WHERE id=?", [hashed, userId]);
 
+    // Success response
     return new Response(
       JSON.stringify({ message: "Password updated successfully" }),
       { status: 200, headers: { "Content-Type": "application/json" } }

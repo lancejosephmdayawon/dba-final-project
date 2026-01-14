@@ -1,8 +1,10 @@
 // src/app/api/admin/transactions/route.js
 import { db } from "@/lib/db";
 
+// GET all transactions with appointment and patient details
 export async function GET() {
   try {
+    // Fetch all transactions with related details
     const [rows] = await db.query(`
       SELECT 
         pay.id AS payment_id,
@@ -32,6 +34,7 @@ export async function GET() {
       ORDER BY a.appointment_date DESC, a.start_time DESC
     `);
 
+    // Return the fetched transactions
     return new Response(JSON.stringify(rows), { status: 200 });
   } catch (err) {
     console.error(err);

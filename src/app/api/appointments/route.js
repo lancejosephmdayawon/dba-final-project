@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextauth";
 
+// POST to book a new appointment
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,6 +17,7 @@ export async function POST(req) {
       [session.user.id]
     );
 
+    // Patient not found
     if (!patient) {
       return new Response(JSON.stringify({ message: "Patient not found" }), { status: 404 });
     }
@@ -37,6 +39,7 @@ export async function POST(req) {
 
     // 4️⃣ Check dentist schedule
     const dayOfWeek = new Date(date + "T00:00:00").toLocaleDateString("en-US", { weekday: "long" });
+    // Get schedule
     const [[schedule]] = await db.query(
       "SELECT start_time, end_time FROM dentist_schedules WHERE day_of_week = ? AND is_active = 1",
       [dayOfWeek]

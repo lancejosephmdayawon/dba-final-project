@@ -1,8 +1,11 @@
 // /app/api/admin/appointments/route.js
 import { db } from "@/lib/db";
 
+// GET all appointments with patient and service details
 export async function GET() {
   try {
+
+  // Fetch all appointments with patient and service details
     const [rows] = await db.query(`
       SELECT 
         a.id,

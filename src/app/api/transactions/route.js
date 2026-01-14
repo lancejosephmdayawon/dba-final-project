@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextauth";
 
+// GET to fetch user transactions
 export async function GET(req) {
   try {
     // Get current user from session

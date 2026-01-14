@@ -1,13 +1,15 @@
 // src/app/api/admin/transactions/[id]/route.js
 import { db } from "@/lib/db";
 
+// PATCH to update transaction/payment details
 export async function PATCH(req, context) {
   try {
-    const params = await context.params; // await params
+    const params = await context.params;
     const id = Number(params.id);
 
     const { status, payment_method } = await req.json();
 
+    // Validate ID
     if (!id) {
       return new Response(JSON.stringify({ error: "Invalid ID" }), { status: 400 });
     }
@@ -28,6 +30,7 @@ export async function PATCH(req, context) {
     const fields = [];
     const values = [];
 
+    // Build dynamic query based on provided fields
     if (status) {
       fields.push("status = ?");
       values.push(status);
@@ -39,6 +42,7 @@ export async function PATCH(req, context) {
       }
     }
 
+    // Payment method
     if (payment_method) {
       fields.push("payment_method = ?");
       values.push(payment_method);
@@ -46,11 +50,13 @@ export async function PATCH(req, context) {
 
     values.push(id);
 
+    // Execute update
     await db.query(
       `UPDATE payments SET ${fields.join(", ")} WHERE id = ?`,
       values
     );
 
+    // Return success response
     return new Response(JSON.stringify({ message: "Payment updated" }), { status: 200 });
   } catch (err) {
     console.error(err);

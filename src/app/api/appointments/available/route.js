@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 
+// GET available appointment slots for a service on a given date
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const serviceId = searchParams.get("serviceId");
@@ -13,6 +14,7 @@ export async function GET(req) {
       "SELECT duration_minutes FROM services WHERE id = ?",
       [serviceId]
     );
+    // Invalid service
     if (!service || service.duration_minutes <= 0) return new Response(JSON.stringify([]));
     const duration = service.duration_minutes;
 

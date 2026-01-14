@@ -17,6 +17,6 @@ export async function GET() {
   );
 
   return Response.json({
-    patientId: rows.length ? rows[0].id : null, // ✅ patients.id
+    patientId: rows.length ? rows[0].id : null, // patients.id
   });
 }

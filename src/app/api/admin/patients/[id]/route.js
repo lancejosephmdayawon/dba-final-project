@@ -1,10 +1,11 @@
-// Path: src/app/api/admin/patients/[id]/route.js
+// src/app/api/admin/patients/[id]/route.js
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextauth";
 import { db } from "@/lib/db";
 
+// PUT to update patient details
 export async function PUT(req, context) {
-  const params = await context.params; // <-- await params, not context
+  const params = await context.params;
   const session = await getServerSession(authOptions);
 
   if (!session || session.user.role !== "admin") {
@@ -36,15 +37,18 @@ export async function PUT(req, context) {
   return new Response(JSON.stringify({ success: true }));
 }
 
+// PATCH to verify or unverify patient email
 export async function PATCH(req, context) {
-  const params = await context.params; // <-- await params
+  const params = await context.params;
   const session = await getServerSession(authOptions);
 
   if (!session || session.user.role !== "admin") {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
 
+  // Parse request body
   const { verified } = await req.json();
+  // Update email_verified status
   await db.query(
     `UPDATE users SET email_verified=? WHERE id=?`,
     [verified ? 1 : 0, params.id]
