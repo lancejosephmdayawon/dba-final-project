@@ -103,12 +103,12 @@ export default function LoginForm() {
               </span>
             </div>
 
-            {/* Forgot Password */}
+            {/* Forgot Password
             <div className="justify-self-end mt-2 flex items-center">
               <a href="#" className="text-blue-600 text-xxs hover:underline">
                 Forgot Password?
               </a>
-            </div>
+            </div> */}
 
             {/* Submit Button */}
             <button
