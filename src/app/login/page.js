@@ -45,7 +45,11 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-blue-500">
+    <div
+      className="flex items-center justify-center min-h-screen 
+  bg-[linear-gradient(rgba(59,130,246,0.6),rgba(59,130,246,0.6)),url('/images/login-bg.jpg')] 
+  bg-cover bg-center"
+    >
       <div className="text-center bg-white/30 backdrop-blur-md rounded-xl p-8 w-96 shadow-md">
         <div className="bg-blue-50 p-6 rounded-lg shadow-md mx-auto">
           <Image
